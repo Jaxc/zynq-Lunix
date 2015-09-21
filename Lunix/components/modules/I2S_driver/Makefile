@@ -7,9 +7,6 @@ ifndef PETALINUX
 $(error You must source the petalinux/settings.sh script before working with PetaLinux)
 endif
 
-PROOT=/home/jaxc/FPGA/Linux/Lunix
-LINUX_KERNEL=linux/kernel
-
 -include modules.common.mk
 
 KERNEL_BUILD:=$(PROOT)/build/$(LINUX_KERNEL)

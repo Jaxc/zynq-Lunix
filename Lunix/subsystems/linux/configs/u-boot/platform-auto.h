@@ -78,7 +78,7 @@
 #define CONFIG_BOOTP_MAY_FAIL
 #define CONFIG_NETCONSOLE	1
 #define CONFIG_ETHADDR	00:0a:35:00:1e:53
-#define CONFIG_SERVERIP	10.235.163.97
+#define CONFIG_SERVERIP	192.168.43.120
 #define CONFIG_IPADDR
 
 /* spi_flash - ps7_qspi_0 */

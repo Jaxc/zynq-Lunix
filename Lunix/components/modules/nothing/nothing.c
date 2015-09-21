@@ -24,6 +24,7 @@ MODULE_DESCRIPTION
    Delete if you don't need them */
 unsigned myint = 0xdeadbeef;
 char *mystr = "default";
+unsigned long *base_addr; 
 
 module_param(myint, int, S_IRUGO);
 module_param(mystr, charp, S_IRUGO);
@@ -131,17 +132,25 @@ static int nothing_remove(struct platform_device *pdev)
 }
 
 #ifdef CONFIG_OF
-static struct of_device_id nothing_of_match[] = {
+/*static struct of_device_id nothing_of_match[] = {
 	{ .compatible = "vendor,nothing", },
-	{ /* end of list */ },
+	{ /* end of list / },
 };
-MODULE_DEVICE_TABLE(of, nothing_of_match);
+MODULE_DEVICE_TABLE(of, nothing_of_match);*/
+
+ /* device match table to match with device node in device tree */
+ static const struct of_device_id myled_of_match[] = {
+     {.compatible = "dglnt,myled-1.00.a"},
+     {},
+ };
+ 
+ MODULE_DEVICE_TABLE(of, myled_of_match);
 #else
 # define nothing_of_match
 #endif
 
 
-static struct platform_driver nothing_driver = {
+/*static struct platform_driver nothing_driver = {
 	.driver = {
 		.name = DRIVER_NAME,
 		.owner = THIS_MODULE,
@@ -149,15 +158,36 @@ static struct platform_driver nothing_driver = {
 	},
 	.probe		= nothing_probe,
 	.remove		= nothing_remove,
+};*/
+
+ static struct platform_driver nothing_driver = {
+     .driver = {
+            .name = DRIVER_NAME,
+            .owner = THIS_MODULE,
+            .of_match_table = myled_of_match},
+     .probe = nothing_probe,
+     .remove = nothing_remove
+//     .shutdown = myled_shutdown
 };
 
 static int __init nothing_init(void)
 {
+	int err = 0;
 	printk("<1>Hello module world.\n");
 	printk("<1>Module parameters were (0x%08x) and \"%s\"\n", myint,
 	       mystr);
+	
+	
+	err = platform_driver_register(&nothing_driver);
+	iounmap(base_addr);
 
-	return platform_driver_register(&nothing_driver);
+	printk("<1>Module name: %s\n", DRIVER_NAME);
+	printk("<1>Baseaddress: 0x%08x\n", base_addr);
+	printk("<1>Register error: 0x%08x\n", err);
+
+
+
+	return err;
 }
 
 
