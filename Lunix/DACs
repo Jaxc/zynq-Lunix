@@ -1,0 +1,4 @@
+#bin/bash
+
+petalinux-build -c rootfs/DAC_test -v
+scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no /home/jaxc/FPGA/Linux/Lunix/build/linux/rootfs/apps/DAC_test/DAC_test root@192.168.0.10:/bin

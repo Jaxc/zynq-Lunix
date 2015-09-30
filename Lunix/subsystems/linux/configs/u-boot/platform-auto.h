@@ -78,8 +78,10 @@
 #define CONFIG_BOOTP_MAY_FAIL
 #define CONFIG_NETCONSOLE	1
 #define CONFIG_ETHADDR	00:0a:35:00:1e:53
-#define CONFIG_SERVERIP	192.168.43.120
-#define CONFIG_IPADDR
+#define CONFIG_SERVERIP	10.235.81.117
+#define CONFIG_IPADDR	192.168.0.10
+#define CONFIG_GATEWAYIP	192.168.0.1
+#define CONFIG_NETMASK	255.255.255.0
 
 /* spi_flash - ps7_qspi_0 */
 #define XILINX_PS7_QSPI_CLK_FREQ_HZ	200000000
@@ -185,7 +187,7 @@
 #define CONFIG_SYS_BOOTMAPSZ 0x08000000
 
 /* PREBOOT */
-#define CONFIG_PREBOOT	"echo U-BOOT for ${hostname};setenv preboot; echo; dhcp"
+#define CONFIG_PREBOOT	"echo U-BOOT for ${hostname};setenv preboot; echo; "
 
 /* Extra U-Boot Env settings */
 #define CONFIG_EXTRA_ENV_SETTINGS \

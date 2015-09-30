@@ -257,7 +257,7 @@ static int axi_i2s_dev_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id axi_i2s_of_match[] = {
-	{ .compatible = "adi,axi-i2s-1.00.a", },
+	{ .compatible = "xlnx,axi-i2s-adi-1.0a", },
 	{},
 };
 MODULE_DEVICE_TABLE(of, axi_i2s_of_match);
