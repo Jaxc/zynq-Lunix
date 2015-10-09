@@ -5,6 +5,7 @@
  */
 #include <stdio.h>
 #include <linux/i2c-dev.h>
+ #include <include/linux/i2c.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -83,7 +84,7 @@ static int IicRead()
     //Xuint16 BytesToRead=1;
     Xuint8 BytesWritten;
     Xuint8 BytesRead=2;            /* Number of Bytes read from the IIC device. */
-    unsigned short Register_value = 0;
+    unsigned long Register_value = 0;
     //Xuint16 Index;                /* Loop variable. */
     //Xuint16 OffsetAddr = 0x0;    /* Address offset in EEPROM to be written. */
     //Xuint8 ReadBytes=1;
@@ -98,26 +99,31 @@ static int IicRead()
     }
  
     unsigned char i;
-    unsigned char *index;
+    unsigned char *index[3];
     unsigned char shifted_index;
+unsigned char i2 = 0x0;
+    index[2] = &i2;
+    i = 0x20;
+    index[0] = &i;  
+    index[1] = &i;
+    write(Fdiic, index, 2);
 
-    i = 0xFE;
-    index = &i;
 
     Xuint8 *crnt_read[3];
     crnt_read[0] = malloc(sizeof(crnt_read));
     crnt_read[1] = malloc(sizeof(crnt_read));
     crnt_read[2] = malloc(sizeof(crnt_read));
 
-    write(Fdiic, index, 1);
+    write(Fdiic, index, 2);
+    printf("%s\n",strerror(errno));
 
-    read(Fdiic,crnt_read,3);
+    BytesRead = read(Fdiic,crnt_read,2);
     printf ("Bytes read: %d\n", BytesRead);
     printf("%s\n",strerror(errno));
-    Register_value = (uintptr_t) crnt_read[0];
-    printf("Reg lower: 0x%x %x %x\n", *crnt_read[0], *crnt_read[1]);//, *crnt_read[2]);
+    //Register_value = *crnt_read[0];
+    printf("Reg lower: 0x%x %x\n",  *crnt_read[1], *crnt_read[2]);//, (uintptr_t) crnt_read[1],  (uintptr_t) crnt_read[2]);
     //BytesRead = ReadI2CData(crnt_read, ReadBytes);
-    Register_value = ((uintptr_t) *crnt_read[0] << 8) | (uintptr_t) *crnt_read[1];
+    //Register_value = (((uintptr_t) *crnt_read[0]) << 16) ;//| ((uintptr_t) crnt_read[1] << 8 ) ;//| (uintptr_t) crnt_read[2];
     printf("%x Register value: 0x%x\n", *index, Register_value);
     /*for (i = 0; i <= num_addr; i++){
         shifted_index = i;//(i << 1);
